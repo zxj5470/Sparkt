@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group groupName
+version versionNumber
+
+apply plugin: 'kotlin'
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    compile "org.scala-lang:scala-library:$scalaVersion"
+    compile "org.scala-lang:scala-reflect:$scalaVersion"
+    compile "org.scala-lang:scala-compiler:$scalaVersion"
+
+    compile 'org.apache.spark:spark-mllib_2.11:2.1.0'
+    compile 'org.apache.spark:spark-sql_2.11:2.1.0'
+    compile 'org.apache.spark:spark-streaming-flume-assembly_2.11:2.1.0'
+    compile 'org.apache.spark:spark-graphx_2.11:2.1.0'
+    compile 'org.apache.spark:spark-launcher_2.11:2.1.0'
+    compile 'org.apache.spark:spark-catalyst_2.11:2.1.0'
+    compile 'org.apache.spark:spark-streaming_2.11:2.1.0'
+    compile 'org.apache.spark:spark-core_2.11:2.1.0'
+
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
