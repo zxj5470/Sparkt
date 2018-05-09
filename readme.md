@@ -19,21 +19,27 @@ dependencies {
 ```
 
 ## Samples
-- Calculate $\pi$
+- Calculate Pi
+
 ```kotlin
 import com.github.zxj5470.sparkt.api.ext.*
 import scala.util.Random
 
 fun main(args: Array<String>) {
-	val tasks = 4
-	val n = tasks * 100000
-	val sc = defaultSparkContext
+    val tasks = 4
+    val n = tasks * 100000
+    val sc = sparkContext {
+                appName = "local"
+                master = "local"
+             }.toJavaSparkContext {
+                 logLevel = "OFF"
+             }
 
-	val count = sc.parallelize((1..n).toList(), tasks).map {
-		val x = Random().nextDouble() * 2 - 1
-		val y = Random().nextDouble() * 2 - 1
-		if (x * x + y * y <= 1) 1 else 0
-	}.reduce { i, j -> i + j }
-	println("Pi is roughly " + 4.0 * count / n)
+    val count = sc.parallelize((1..n).toList(), tasks).map {
+        val x = Random().nextDouble() * 2 - 1
+        val y = Random().nextDouble() * 2 - 1
+        if (x * x + y * y <= 1) 1 else 0
+    }.reduce { i, j -> i + j }
+    println("Pi is roughly " + 4.0 * count / n)
 }
 ```
